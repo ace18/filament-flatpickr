@@ -484,24 +484,24 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
 
     public function getMaxDate(): Carbon|string|null
     {
-        return $this->maxDate;
+        return $this->evaluate($this->maxDate);
     }
 
     public function maxDate(Carbon|string|null|Closure $maxDate = 'now'): static
     {
-        $this->maxDate = $maxDate ? Carbon::parse($maxDate) : $maxDate;
+        $this->maxDate = $maxDate;
 
         return $this;
     }
 
     public function getMinDate(): Carbon|string|null
     {
-        return $this->minDate;
+        return $this->evaluate($this->minDate);
     }
 
     public function minDate(Carbon|string|null|Closure $minDate): static
     {
-        $this->minDate = $minDate ? Carbon::parse($minDate) : $minDate;
+        $this->minDate = $minDate;
 
         return $this;
     }
