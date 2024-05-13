@@ -90,9 +90,9 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
 
     protected Carbon|string|null|Closure $minDate = null;
 
-    protected ?string $maxTime = null;
+    protected string|null|Closure $maxTime = null;
 
-    protected ?string $minTime = null;
+    protected string|null|Closure $minTime = null;
 
     protected ?string $nextArrow = '>';
 
@@ -128,10 +128,10 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
             $this->mode(FlatpickrMode::MULTIPLE);
         }
         if ($this->isEnableTime()) {
-            if (! \Str::of($this->getDateFormat())->contains('H', ignoreCase: true)) {
+            if (!\Str::of($this->getDateFormat())->contains('H', ignoreCase: true)) {
                 $this->dateFormat('Y-m-d H:i:s');
             }
-            if (! \Str::of($this->getAltFormat())->contains('H', ignoreCase: true)) {
+            if (!\Str::of($this->getAltFormat())->contains('H', ignoreCase: true)) {
                 $this->altFormat('F j Y H:i K');
             }
         }
@@ -191,8 +191,8 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
             'inline' => $this->inline,
             'minDate' => $this->minDate,
             'maxDate' => $this->maxDate,
-            'minTime' => $this->minTime,
-            'maxTime' => $this->maxTime,
+            'minTime' => $this->getMinTime(),
+            'maxTime' => $this->getMaxTime(),
             'nextArrow' => $this->nextArrow,
             'prevArrow' => $this->prevArrow,
             'noCalendar' => $this->noCalendar,
@@ -246,7 +246,7 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
         );
         $this->theme(config('coolsam-flatpickr.default_theme', FlatpickrTheme::DEFAULT));
 
-        if (! $this->dehydrateStateUsing) {
+        if (!$this->dehydrateStateUsing) {
             $this->dehydrateStateUsing(static function (Flatpickr $component, $state) {
                 return self::dehydratePickerState($component, $state);
             });
@@ -263,7 +263,7 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
         if (blank($state)) {
             return null;
         }
-        if (! $state instanceof CarbonInterface) {
+        if (!$state instanceof CarbonInterface) {
             if ($component->isRangePicker() || $component->getMode() === FlatpickrMode::RANGE) {
                 $range = \Str::of($state)->explode(' to ');
                 $state = collect($range)->map(fn ($date) => Carbon::parse($date)
@@ -508,10 +508,10 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
 
     public function getMaxTime(): ?string
     {
-        return $this->maxTime;
+        return $this->evaluate($this->maxTime);
     }
 
-    public function maxTime(?string $maxTime): static
+    public function maxTime(string|null|Closure $maxTime): static
     {
         $this->maxTime = $maxTime;
 
@@ -520,10 +520,10 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
 
     public function getMinTime(): ?string
     {
-        return $this->minTime;
+        return $this->evaluate($this->minTime);
     }
 
-    public function minTime(?string $minTime): static
+    public function minTime(string|null|Closure $minTime): static
     {
         $this->minTime = $minTime;
 
@@ -812,16 +812,16 @@ class Flatpickr extends Field implements Contracts\CanBeLengthConstrained, Contr
             $this->theme(FlatpickrTheme::LIGHT);
         }
 
-        return asset('css/'.static::PACKAGE_NAME.'/flatpickr-'.$this->getTheme().'-theme.css');
+        return asset('css/' . static::PACKAGE_NAME . '/flatpickr-' . $this->getTheme() . '-theme.css');
     }
 
     public function getDarkThemeAsset(): string
     {
-        return asset('css/'.static::PACKAGE_NAME.'/flatpickr-dark-theme.css');
+        return asset('css/' . static::PACKAGE_NAME . '/flatpickr-dark-theme.css');
     }
 
     public function getLightThemeAsset(): string
     {
-        return asset('css/'.static::PACKAGE_NAME.'/flatpickr-light-theme.css');
+        return asset('css/' . static::PACKAGE_NAME . '/flatpickr-light-theme.css');
     }
 }
