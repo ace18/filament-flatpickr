@@ -12,7 +12,7 @@
     $suffixIcon = $getSuffixIcon();
     $suffixLabel = $getSuffixLabel();
     $statePath = $getStatePath();
-    $path = trim(collect(explode('.', $statePath))->map(fn(string $path) => is_numeric($path) ? "[{$path}]" : ".{$path}")->join(''), '.');
+    $path = trim(collect(explode('.', $statePath))->map(fn(string $path) => is_numeric($path) ? "[{$path}]" : "?.{$path}")->join(''), '?.');
     $config =array_merge($getConfig(), $getCustomConfig());
     $attribs = [
         "disabled" => $isDisabled,
@@ -33,7 +33,7 @@
     <link rel="stylesheet" id="pickr-theme" type="text/css" href="{{$getThemeAsset()}}">
     <div
         x-data="flatpickrDatepicker({
-                state: $wire.{{ $path }},
+                state: $wire.{{ $path }} ,
                 packageConfig: @js($config),
                 attribs: @js($attribs)
             })"
