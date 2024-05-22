@@ -33,7 +33,7 @@
     <link rel="stylesheet" id="pickr-theme" type="text/css" href="{{$getThemeAsset()}}">
     <div
         x-data="flatpickrDatepicker({
-                state: $wire.{{ $path }} ,
+                state: $wire.{{ $path }},
                 packageConfig: @js($config),
                 attribs: @js($attribs)
             })"
